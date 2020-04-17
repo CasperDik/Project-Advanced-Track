@@ -1,1 +1,2 @@
-#not sure how to do calculations
+#check for the calculations online
+#to be continued..
