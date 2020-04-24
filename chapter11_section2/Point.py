@@ -34,3 +34,6 @@ class Point:
 
     def __rmul__(self, other):                  #e.g. 4 * (3,3) = (12,12)
         return Point(other * self.x, other * self.y)
+
+    def reverse(self):
+        (self.x, self.y) = (self.y, self.x)
