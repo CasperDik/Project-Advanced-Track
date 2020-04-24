@@ -26,3 +26,11 @@ class Point:
         b = self.y - (a * self.x)
         return "({0}, {1})".format(a, b)
 
+    def __add__(self, other):
+        return Point(self.x + other.x, self.y + other.y)
+
+    def __mul__(self, other):               #e.g. (3,3)*(3,3)= (9,9)
+        return self.x * other.x + self.y * other.y
+
+    def __rmul__(self, other):                  #e.g. 4 * (3,3) = (12,12)
+        return Point(other * self.x, other * self.y)
