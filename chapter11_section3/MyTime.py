@@ -31,11 +31,8 @@ class MyTime:
     def __add__(self, other):
         return MyTime(0, 0, self.to_seconds() + other.to_seconds())
 
-x = MyTime(12,45,34)
-y = MyTime(3,12,30)
-z =x+y
-
-print(x.add_time1(y))
-print(x.increment(500))
-print(x.to_seconds())
-print(z)
+    def within(self,t1,t2):
+        if self.to_seconds() > t2.to_seconds() and self.to_seconds() < t1.to_seconds():
+            return True
+        else:
+            return False
