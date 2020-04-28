@@ -14,13 +14,8 @@ class MyTime:
         return MyTime(0, 0, secs)
 
     def increment(self, seconds):           #add seconds to time
-        self.seconds += seconds
-        while self.seconds >= 60:
-            self.seconds -= 60
-            self.minutes += 1
-        while self.minutes >= 60:
-            self.minutes -= 60
-        return "({0}:{1}:{2})".format(self.hours,self.minutes,self.seconds)
+        x = self.to_seconds() + seconds
+        return MyTime(0,0,x)
 
     def to_seconds(self):
         return self.hours * 3600 + self.minutes * 60 + self.seconds
