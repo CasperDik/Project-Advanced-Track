@@ -4,8 +4,10 @@ class Hand(Deck):
     def __init__(self, name =""):
         self.cards =[]
         self.name = name
+
     def add(self, card):
         self.cards.append(card)
+
     def __str__(self):
         s = "Hand of " + self.name
         if self.empty():
@@ -15,8 +17,8 @@ class Hand(Deck):
         return s + Deck.__str__(self)
 
 
-deck = Deck()
-deck.shuffle()
-hand = Hand("Frank")
-deck.deal([hand],5)
+#deck = Deck()
+#deck.shuffle()
+#hand = Hand("Frank")
+#deck.deal([hand],5)
 #print(hand)
