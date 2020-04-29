@@ -7,7 +7,7 @@ class CardGame:
         self.deck = Deck()
         self.deck.shuffle()
 
-class OldMaidhand(CardGame):
+class OldMaidhand(Hand):
     def remove_matches(self):
         count = 0
         original_cards = self.cards[:]
@@ -20,6 +20,7 @@ class OldMaidhand(CardGame):
                 count += 1
         return count
 
+class OldMaidGame(CardGame):
     def play(self, names):
         self.deck.remove(Card(0,12))
         self.hands = []
@@ -33,6 +34,7 @@ class OldMaidhand(CardGame):
         matches = self.remove_all_matches()
         print("---------- Matches discarded, play begins")
         self.print_hands()
+
         turn = 0
         num_hands = len(self.hands)
         while matches < 25:
@@ -69,6 +71,5 @@ class OldMaidhand(CardGame):
         for hand in self.hands:
             print(hand)
 
-
-game = OldMaidhand()
+game = OldMaidGame()
 game.play(["Allen", "Jeff", "Chris"])
