@@ -14,7 +14,7 @@ def read_file(file_name):
     return settings
 
 def write_file(settings, file_name):
-    with open(file_name, "w+") as settings_file
+    with open(file_name, "w+") as settings_file:
         for setting_name, setting_value in settings.items():
             settings_file.write("{} {} \n".format(setting_name,setting_value))
 
