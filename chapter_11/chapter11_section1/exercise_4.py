@@ -1,4 +1,4 @@
-from chapter11_section2.Point import Point
+from chapter_11.chapter11_section2.Point import Point
 
 p = Point(1,1)
 q = Point(5,5)

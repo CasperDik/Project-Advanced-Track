@@ -1,4 +1,4 @@
-from chapter11_section3.MyTime import MyTime
+from chapter_11.chapter11_section3.MyTime import MyTime
 
 x = MyTime(12,12,12)
 y = MyTime(10,10,10)

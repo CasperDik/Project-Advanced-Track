@@ -1,4 +1,4 @@
-from chapter11_section4.Cards import Card
+from chapter_11.chapter11_section4.Cards import Card
 
 x = Card(1,12)
 y = Card(1,1)

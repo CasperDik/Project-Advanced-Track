@@ -1,6 +1,7 @@
-from chapter11_section4.Cards import Card
-from chapter11_section4.Deck import Deck
-from chapter11_section5.Hand import Hand
+from chapter_11.chapter11_section4.Cards import Card
+from chapter_11.chapter11_section4.Deck import Deck
+from chapter_11.chapter11_section5.Hand import Hand
+
 
 class CardGame:
     def __init__(self):

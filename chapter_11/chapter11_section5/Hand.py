@@ -1,4 +1,4 @@
-from chapter11_section4.Deck import Deck
+from chapter_11.chapter11_section4.Deck import Deck
 
 class Hand(Deck):
     def __init__(self, name =""):
