@@ -27,7 +27,7 @@ class Settings:
     def read_settings(self, setting_names):
         for setting_name in setting_names:
             if setting_name not in self.settings.keys():
-                setting_value = input("Please give a value for" + setting_name + ": ")
+                setting_value = input("Please give a value for " + setting_name + ": ")
                 self.settings[setting_name] = setting_value
         write_file(self.settings, self.file_name)
 
