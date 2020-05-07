@@ -20,5 +20,4 @@ plt.xlabel("x")
 plt.ylabel("y")
 plt.title('Fitting primes')
 plt.legend()
-
-plt.show()
+plt.savefig('the_best_plot.pdf')
