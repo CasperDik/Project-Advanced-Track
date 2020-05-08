@@ -6,7 +6,7 @@ probability_tails = 0.5
 n = 1000
 n_lines = 5
 
-for i in range(n_lines):
+for j in range(n_lines):
 
     count = []
     tails = 0
@@ -21,7 +21,7 @@ for i in range(n_lines):
         count.append(expected_tails)
     nested_list.append(count)
 
-x_range = list(range(len(count)))
+x_range = list(range(len(nested_list[0])))
 
 for i in range(n_lines):
     plt.plot(x_range, nested_list[i])
