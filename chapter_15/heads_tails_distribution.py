@@ -1,4 +1,4 @@
-# central limit theorem?
+# law of large numbers
 
 import random
 from matplotlib import pyplot as plt
