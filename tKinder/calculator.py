@@ -11,6 +11,17 @@ class Calculator(Frame):
         self.master.title("GUI")
         self.pack(fill=BOTH, expand=1)
 
+        self.entrythingy = Entry()
+        self.entrythingy.pack()
+        self.contents = StringVar()
+        # self.contents.set("this is a variable")
+        self.entrythingy["textvariable"] = self.contents
+        self.entrythingy.bind('<Key-Return>', self.function)
+
+    def function(self, event):
+        x = self.contents.get()
+        print(x)
+
 
 root = Tk()
 root.geometry("400x300")
