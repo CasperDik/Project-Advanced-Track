@@ -1,29 +1,50 @@
+# followed tutorial:
+# https://medium.com/@adeyinkaadegbenro/project-build-a-python-gui-calculator-fc92bddb744d
+
 from tkinter import *
 
 
 class Calculator(Frame):
-    def __init__(self, master=None):
+    def __init__(self, master):
         Frame.__init__(self, master)
         self.master = master
-        self.init_window()
+        master.title("Calculator")
 
-    def init_window(self):
-        self.master.title("GUI")
-        self.pack(fill=BOTH, expand=1)
+        self.screen = Text(master, state="normal", width=30, height=3, background="grey", foreground="blue")
+        self.screen.grid(row=0, column=0, columnspan=4, padx=5, pady=5)
+        self.equation = ''
 
-        self.entrythingy = Entry()
-        self.entrythingy.pack()
-        self.contents = StringVar()
-        # self.contents.set("this is a variable")
-        self.entrythingy["textvariable"] = self.contents
-        self.entrythingy.bind('<Key-Return>', self.function)
+        # buttons
+        b1 = self.createButton(7)
+        b2 = self.createButton(8)
+        b3 = self.createButton(9)
+        b4 = self.createButton(u"\u232B", None)
+        b5 = self.createButton(4)
+        b6 = self.createButton(5)
+        b7 = self.createButton(6)
+        b8 = self.createButton(u"\u00F7")
+        b9 = self.createButton(1)
+        b10 = self.createButton(2)
+        b11 = self.createButton(3)
+        b12 = self.createButton('*')
+        b13 = self.createButton('.')
+        b14 = self.createButton(0)
+        b15 = self.createButton('+')
+        b16 = self.createButton('-')
+        b17 = self.createButton('=', None, 34)
 
-    def function(self, event):
-        x = self.contents.get()
-        print(x)
+        buttons = [b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17]
 
+        count = 0
+        for row in range(1, 5):
+            for column in range(4):
+                buttons[count].grid(row=row, column=column)
+                count += 1
+            buttons[16].grid(row=5, column=0, columnspan=4)
+
+    def createButton(self, val, write=True, width=7):
+        return Button(self.master, text=val, command=lambda: self.click(val, write), width=width)
 
 root = Tk()
-root.geometry("400x300")
 app = Calculator(root)
 root.mainloop()
