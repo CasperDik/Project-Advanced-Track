@@ -3,14 +3,14 @@
 
 from tkinter import *
 
-
 class Calculator(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
         self.master = master
         master.title("Calculator")
 
-        self.screen = Text(master, state="normal", width=30, height=3, background="grey", foreground="blue")
+        self.screen = Text(master, state="disabled", width=30, height=3, background="grey", foreground="blue")
+        self.screen.configure(state='normal')
         self.screen.grid(row=0, column=0, columnspan=4, padx=5, pady=5)
         self.equation = ''
 
@@ -44,6 +44,30 @@ class Calculator(Frame):
 
     def createButton(self, val, write=True, width=7):
         return Button(self.master, text=val, command=lambda: self.click(val, write), width=width)
+
+    def click(self, text, write):
+        if write == None:
+            if text == '=' and self.equation:
+                self.equation = re.sub(u"\u00F7", '/', self.equation)
+                print(self.equation)
+                answer = str(eval(self.equation))
+                self.clear_screen()
+                self.insert_screen(answer, newline=True)
+            elif text == u"\u232B":
+                self.clear_screen()
+        else:
+            self.insert_screen(text)
+
+    def clear_screen(self):
+        self.equation = ''
+        self.screen.configure(state='normal')
+        self.screen.delete('1.0', END)
+
+    def insert_screen(self, value, newline=False):
+        self.screen.configure(state='normal')
+        self.screen.insert(END, value)
+        self.equation += str(value)
+        self.screen.configure(state='disabled')
 
 root = Tk()
 app = Calculator(root)
