@@ -1,6 +1,7 @@
 from tkinter import *
 from os import remove, listdir
 from os.path import exists, getsize, isdir, isfile, join
+import os
 
 from tkinter import filedialog
 
