@@ -1,5 +1,4 @@
 from os.path import exists, join, getsize
-import os
 from tkinter import *
 
 
