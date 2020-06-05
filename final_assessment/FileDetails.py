@@ -1,8 +1,9 @@
 from os.path import exists, join, getsize
 from tkinter import *
+from PIL import ImageTk, Image
+
 
 class FileDetails():
-
     def __init__(self, cleanUpGui, folder, path):
         self.gui = cleanUpGui
         self.folder = folder
@@ -26,6 +27,8 @@ class FileDetails():
                 for ext in list:
                     if filepath.endswith(ext) == True:
                         self.gui.type_file_info.configure(text="file is an image")
+                        im = Image.open(filepath)  # not a preview in tkinter
+                        im.show()
                         break
                 else:
                     self.gui.type_file_info.configure(text="")
