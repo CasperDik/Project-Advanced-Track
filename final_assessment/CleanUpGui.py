@@ -14,6 +14,7 @@ class CleanUpGui(Frame):
         Frame.__init__(self, master=master)
         self.master.title("Clean up")
         self.pack(fill=BOTH, expand=1)
+        self.never_delete_list = []
 
         # Setup variables
         self.folder_details = None
@@ -41,10 +42,14 @@ class CleanUpGui(Frame):
 
     def delete_current_file(self):
         # check if a current file is available
-        if self.current_file:
-            # delete the current file
-            remove(join(self.folder_details.path, self.current_file.path))
-
+        path = join(self.folder_details.path, self.current_file.path)
+        if path not in self.never_delete_list:
+            print("not in list")  # show on GUI
+            if self.current_file:
+                # delete the current file
+                remove(join(self.folder_details.path, self.current_file.path))
+        else:
+            print("can't be deleted")  # show on GUI
         # load the next file
         self.load_next_file()
 
@@ -59,10 +64,9 @@ class CleanUpGui(Frame):
             self.current_file.display_details()
 
     def never_delete(self):
-        list = []
         path = join(self.folder_details.path, self.current_file.path)
-        list.append(path)
-        print(list)
+        self.never_delete_list.append(path)
+        self.load_next_file()
 
     # startup
 
