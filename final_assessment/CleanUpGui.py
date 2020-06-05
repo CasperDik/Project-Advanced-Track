@@ -43,19 +43,17 @@ class CleanUpGui(Frame):
     def delete_current_file(self):
         # check if a current file is available
         ndfile = open("never_delete_files.txt", "r")
-        ndfiles = ndfile.read()
+        ndfiles = ndfile.read().splitlines()
         path = join(self.folder_details.path, self.current_file.path)
-
         if path in ndfiles:
-            print("not in list")  # show on GUI
-            if self.current_file:
-                pass
-                # delete the current file
-                # remove(join(self.folder_details.path, self.current_file.path))
+            print("in list, can't be deleted")  # show on GUI           #todo
+            self.load_next_file()
         else:
-            print("can't be deleted")  # show on GUI
-        # load the next file
-        self.load_next_file()
+            if self.current_file:
+                print("will be deleted")  # show on GUI                 #todo
+                remove(join(self.folder_details.path, self.current_file.path))
+                # load the next file
+                self.load_next_file()
 
     def load_next_file(self):
         if self.folder_details:

@@ -27,7 +27,7 @@ class FileDetails():
                 for ext in list:
                     if filepath.endswith(ext) == True:
                         self.gui.type_file_info.configure(text="file is an image")
-                        im = Image.open(filepath)  # not a preview in tkinter
+                        im = Image.open(filepath)  # not a preview in tkinter       #todo
                         im.show()
                         break
                 else:
