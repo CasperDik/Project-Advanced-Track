@@ -1,6 +1,5 @@
 from os.path import exists, join, getsize
 from tkinter import *
-import os
 
 class FileDetails():
 
@@ -15,15 +14,17 @@ class FileDetails():
             file_size = getsize(join(self.folder.path, self.path))
             self.gui.current_file_size.configure(text="file size: " + str(file_size))
 
-            filename = join(self.folder.path, self.path)
+            filepath = join(self.folder.path, self.path)
             # test if file is text file
-            if filename.endswith(".txt") == True:
-                self.gui.type_file_info.configure(text="file type is .txt")
+            if filepath.endswith(".txt") == True:
+                fline = open(filepath, "r").readline()
+                self.gui.type_file_info.configure(
+                    text="file type is .txt\n\n Here is a preview of content:\n" + '"' + fline + '"')
             else:
                 # test if file is an image
                 list = [".jpg", ".png", ".gif", ".tif"]
                 for ext in list:
-                    if filename.endswith(ext) == True:
+                    if filepath.endswith(ext) == True:
                         self.gui.type_file_info.configure(text="file is an image")
                         break
                 else:
