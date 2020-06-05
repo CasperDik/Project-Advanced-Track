@@ -6,9 +6,11 @@ class FolderDetails():
 
     def __init__(self, path):
         self.path = path
+        # ^^^is the absolute path of the directory
         if isdir(path):
             # only add files not sub folders
             self.files_to_check = [f for f in listdir(path) if isfile(join(path, f))]
+            #^^^list with the file names without extention
 
     def get_next_file(self):
         if self.files_to_check:

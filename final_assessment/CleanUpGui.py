@@ -23,6 +23,7 @@ class CleanUpGui(Frame):
         # Setup GUI elements
         self.current_file_name = Label(self)
         self.current_file_size = Label(self)
+        self.type_file_info = Label(self)
 
         self.delete_file_button = Button(self, text="delete", command=self.delete_current_file)
         self.skip_file_button = Button(self, text="skip", command=self.load_next_file)
@@ -30,6 +31,7 @@ class CleanUpGui(Frame):
         # Place GUI elements on Canvas
         self.current_file_name.pack()
         self.current_file_size.pack()
+        self.type_file_info.pack()
 
         self.delete_file_button.pack()
         self.skip_file_button.pack()
@@ -48,11 +50,13 @@ class CleanUpGui(Frame):
     def load_next_file(self):
         if self.folder_details:
             next_file = self.folder_details.get_next_file()
+            # ^^^ is the name of the file without extention
             if next_file:
                 self.current_file = FileDetails(self, self.folder_details, next_file)
             else:
                 self.current_file = FileDetails(self, self.folder_details, "")
             self.current_file.display_details()
+
 
     # startup
 

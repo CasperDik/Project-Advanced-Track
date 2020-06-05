@@ -3,7 +3,16 @@
 
 import os
 
-file = "final_assessment/messy_folder/hoi"
+file = "final_assessment/messy_folder/"
 
-if os.path.splitext(file)[1] == ".txt":
+if os.path.splitext(file)[-1] == ".txt":
     print("yess!!")
+
+filename = '/home/lancaster/Downloads/a.ppt'
+extention = filename.split('.')[-1]
+print(extention)
+
+from path import Path
+
+x = Path(file).with_suffix(".txt")
+print(x)
