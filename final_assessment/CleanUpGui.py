@@ -24,6 +24,7 @@ class CleanUpGui(Frame):
         self.current_file_name = Label(self)
         self.current_file_size = Label(self)
         self.type_file_info = Label(self)
+        self.never_delete_this_file = Label(self)
 
         self.delete_file_button = Button(self, text="delete", command=self.delete_current_file)
         self.skip_file_button = Button(self, text="skip", command=self.load_next_file)
@@ -32,6 +33,7 @@ class CleanUpGui(Frame):
         # Place GUI elements on Canvas
         self.current_file_name.pack()
         self.current_file_size.pack()
+        self.never_delete_this_file.pack()
         self.type_file_info.pack()
 
         self.delete_file_button.pack()
@@ -46,11 +48,9 @@ class CleanUpGui(Frame):
         ndfiles = ndfile.read().splitlines()
         path = join(self.folder_details.path, self.current_file.path)
         if path in ndfiles:
-            print("in list, can't be deleted")  # show on GUI           #todo
-            self.load_next_file()
+            self.never_delete_this_file.configure(text="The file" + self.current_file.path + " cannot be deleted")
         else:
             if self.current_file:
-                print("will be deleted")  # show on GUI                 #todo
                 remove(join(self.folder_details.path, self.current_file.path))
                 # load the next file
                 self.load_next_file()

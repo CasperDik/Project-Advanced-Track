@@ -14,6 +14,7 @@ class FileDetails():
             self.gui.current_file_name.configure(text="file name: " + self.path)
             file_size = getsize(join(self.folder.path, self.path))
             self.gui.current_file_size.configure(text="file size: " + str(file_size))
+            self.gui.never_delete_this_file.configure(text="")
 
             filepath = join(self.folder.path, self.path)
             # test if file is text file
