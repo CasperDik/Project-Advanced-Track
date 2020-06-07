@@ -20,6 +20,9 @@ class CleanUpGui(Frame):
         self.folder_details = None
         self.current_file = None
 
+        # checkbox
+        self.checkvar1 = IntVar()
+
         # Setup GUI elements
         self.current_file_name = Label(self)
         self.current_file_size = Label(self)
@@ -28,7 +31,8 @@ class CleanUpGui(Frame):
 
         self.delete_file_button = Button(self, text="delete", command=self.delete_current_file)
         self.skip_file_button = Button(self, text="skip", command=self.load_next_file)
-        self.never_delete_button = Button(self, text="never delete this file", command=self.never_delete)
+        self.never_delete_button = Checkbutton(self, text="never delete this file", variable=self.checkvar1, onvalue=1,
+                                               offvalue=0, command=self.never_delete)
 
         # Place GUI elements on Canvas
         self.current_file_name.pack()
@@ -61,19 +65,38 @@ class CleanUpGui(Frame):
             # ^^^ is the name of the file without extention
             if next_file:
                 self.current_file = FileDetails(self, self.folder_details, next_file)
+                self.check_not_delete_list()
+                self.prevent_unchecking()
             else:
                 self.current_file = FileDetails(self, self.folder_details, "")
+                self.check_not_delete_list()
+                self.prevent_unchecking()
             self.current_file.display_details()
 
     def never_delete(self):
         path = join(self.folder_details.path, self.current_file.path)
         file = open("never_delete_files.txt", "a")
         file.write(path + "\n")
-        self.load_next_file()
+
+    def check_not_delete_list(self):
+        ndfile = open("never_delete_files.txt", "r")
+        ndfiles = ndfile.read().splitlines()
+        path = join(self.folder_details.path, self.current_file.path)
+        if path in ndfiles:
+            self.checkvar1.set(1)
+        else:
+            self.checkvar1.set(0)
+
+    def prevent_unchecking(self):
+        print(self.checkvar1)  # todo fix this if statement
+        if self.checkvar1 == 1:
+            self.never_delete_button.config(state=DISABLED)
+            print("works?")
 
     # startup
-
     def select_folder(self):
         folder_path = filedialog.askdirectory()
         self.folder_details = FolderDetails(folder_path)
         self.load_next_file()
+        self.check_not_delete_list()
+        self.prevent_unchecking()
