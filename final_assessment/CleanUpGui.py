@@ -88,10 +88,10 @@ class CleanUpGui(Frame):
             self.checkvar1.set(0)
 
     def prevent_unchecking(self):
-        print(self.checkvar1)  # todo fix this if statement
-        if self.checkvar1 == 1:
+        if self.checkvar1.get() == 1:
             self.never_delete_button.config(state=DISABLED)
-            print("works?")
+        else:
+            self.never_delete_button.config(state=NORMAL)
 
     # startup
     def select_folder(self):
