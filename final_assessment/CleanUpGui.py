@@ -9,7 +9,6 @@ from FileDetails import FileDetails
 from FolderDetails import FolderDetails
 
 
-# todo: error handling
 # todo: Allow the user to create ”quick move” folders where they can move the current file to that folder. (These should also be saved in a/the configuration file).
 # todo: add progress bar?
 
@@ -63,7 +62,7 @@ class CleanUpGui(Frame):
         self.load_next_file()
         self.rename_file()
 
-    def delete_current_file(self):  # todo: error handling if no folder selected
+    def delete_current_file(self):
         # check if a current file is available
         ndfile = open("never_delete_files.txt", "r")
         ndfiles = ndfile.read().splitlines()
@@ -126,4 +125,4 @@ class CleanUpGui(Frame):
             self.prevent_unchecking()
         except AttributeError:
             print("no folder selected")
-            #todo: close window, to prevent further errors
+            raise SystemExit
