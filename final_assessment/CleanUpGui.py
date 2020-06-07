@@ -23,28 +23,37 @@ class CleanUpGui(Frame):
         # checkbox
         self.checkvar1 = IntVar()
 
+        # bytes deleted counter
+        self.bytes_counter = 0
+
         # Setup GUI elements
         self.current_file_name = Label(self)
         self.current_file_size = Label(self)
         self.type_file_info = Label(self)
         self.never_delete_this_file = Label(self)
 
+        self.bytes_counter_label = Label(self)
+
         self.delete_file_button = Button(self, text="delete", command=self.delete_current_file)
         self.skip_file_button = Button(self, text="skip", command=self.load_next_file)
         self.never_delete_button = Checkbutton(self, text="never delete this file", variable=self.checkvar1, onvalue=1,
-                                               offvalue=0, command=self.never_delete)
+                                               offvalue=0, command=self.combined_function)
+        self.bytes_counter_label.configure(text="current bytes deleted: " + str(self.bytes_counter))
 
         # Place GUI elements on Canvas
         self.current_file_name.pack()
         self.current_file_size.pack()
         self.never_delete_this_file.pack()
         self.type_file_info.pack()
-
+        self.bytes_counter_label.pack()
         self.delete_file_button.pack()
         self.skip_file_button.pack()
         self.never_delete_button.pack()
 
     # process buttons
+    def combined_function(self):
+        self.prevent_unchecking()
+        self.never_delete()
 
     def delete_current_file(self):
         # check if a current file is available
@@ -55,6 +64,9 @@ class CleanUpGui(Frame):
             self.never_delete_this_file.configure(text="The file" + self.current_file.path + " cannot be deleted")
         else:
             if self.current_file:
+                file_size = getsize(join(self.folder_details.path, self.current_file.path))
+                self.bytes_counter += file_size
+                self.bytes_counter_label.configure(text="current bytes deleted: " + str(self.bytes_counter))
                 remove(join(self.folder_details.path, self.current_file.path))
                 # load the next file
                 self.load_next_file()
