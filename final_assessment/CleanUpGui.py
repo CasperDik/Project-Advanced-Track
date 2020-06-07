@@ -9,6 +9,10 @@ from FileDetails import FileDetails
 from FolderDetails import FolderDetails
 
 
+# todo: error handling
+# todo: Allow the user to create ”quick move” folders where they can move the current file to that folder. (These should also be saved in a/the configuration file).
+# todo: add progress bar?
+
 class CleanUpGui(Frame):
     def __init__(self, master=None):
         Frame.__init__(self, master=master)
@@ -35,13 +39,13 @@ class CleanUpGui(Frame):
         self.bytes_counter_label = Label(self)
 
         self.delete_file_button = Button(self, text="delete", command=self.delete_current_file)
-        self.skip_file_button = Button(self, text="skip", command=self.load_next_file)
+        self.skip_file_button = Button(self, text="skip", command=self.combined_function2)
         self.never_delete_button = Checkbutton(self, text="never delete this file", variable=self.checkvar1, onvalue=1,
-                                               offvalue=0, command=self.combined_function)
+                                               offvalue=0, command=self.combined_function1)
         self.bytes_counter_label.configure(text="current bytes deleted: " + str(self.bytes_counter))
 
         # Place GUI elements on Canvas
-        self.current_file_name.pack()
+        self.current_file_name.pack()  # todo: greate nice layout, improvement 1?
         self.current_file_size.pack()
         self.never_delete_this_file.pack()
         self.type_file_info.pack()
@@ -51,11 +55,15 @@ class CleanUpGui(Frame):
         self.never_delete_button.pack()
 
     # process buttons
-    def combined_function(self):
+    def combined_function1(self):
         self.prevent_unchecking()
         self.never_delete()
 
-    def delete_current_file(self):
+    def combined_function2(self):
+        self.load_next_file()
+        self.rename_file()
+
+    def delete_current_file(self):  # todo: error handling if no folder selected
         # check if a current file is available
         ndfile = open("never_delete_files.txt", "r")
         ndfiles = ndfile.read().splitlines()
@@ -105,10 +113,17 @@ class CleanUpGui(Frame):
         else:
             self.never_delete_button.config(state=NORMAL)
 
+    def rename_file(self):  # todo: Allow the user to rename the file that should be kept.
+        pass  # write/replace new name to never_delete_files.txt
+
     # startup
     def select_folder(self):
-        folder_path = filedialog.askdirectory()
-        self.folder_details = FolderDetails(folder_path)
-        self.load_next_file()
-        self.check_not_delete_list()
-        self.prevent_unchecking()
+        try:
+            folder_path = filedialog.askdirectory()
+            self.folder_details = FolderDetails(folder_path)
+            self.load_next_file()
+            self.check_not_delete_list()
+            self.prevent_unchecking()
+        except AttributeError:
+            print("no folder selected")
+            #todo: close window, to prevent further errors
