@@ -28,8 +28,13 @@ class FileDetails():
                 for ext in list:
                     if filepath.endswith(ext) == True:
                         self.gui.type_file_info.configure(text="file is an image")
-                        im = Image.open(filepath)  # todo: open as preview in tkinter
-                        # im.show()
+
+                        root = Toplevel()
+                        canvas = Canvas(root, width=300, height=300)
+                        root.title("Preview")
+                        canvas.pack()
+                        self.img = ImageTk.PhotoImage(Image.open(filepath))
+                        canvas.create_image(20, 20, anchor=NW, image=self.img)
                         break
                 else:
                     self.gui.type_file_info.configure(text="")

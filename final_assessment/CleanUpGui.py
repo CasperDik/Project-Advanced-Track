@@ -45,7 +45,7 @@ class CleanUpGui(Frame):
         self.rename = Button(text="rename file", command=self.rename_window)
 
         # Place GUI elements on Canvas
-        self.current_file_name.pack()  # todo: greate nice layout, improvement 1?
+        self.current_file_name.pack()  # todo: create nice layout, improvement 1?
         self.current_file_size.pack()
         self.never_delete_this_file.pack()
         self.type_file_info.pack()
@@ -112,27 +112,32 @@ class CleanUpGui(Frame):
 
     def rename_file(self):
         path = join(self.folder_details.path, self.current_file.path)
-        new_name = join(self.folder_details.path, self.entry.get())  # todo: error handling --> if not extention
+        new_name = join(self.folder_details.path, self.entry.get())  # todo: error handling --> if no extention
         os.rename(path, new_name)
+
+        if self.checkvar1.get() == 1:
+            path = join(self.folder_details.path, self.entry.get())
+            file = open("never_delete_files.txt", "a")
+            file.write(path + "\n")
+
         self.root.destroy()
         self.load_next_file()
 
-    def rename_window(self):  # todo: Allow the user to rename the file that should be kept.
+    def rename_window(self):
         self.root = Tk()
+        self.root.title("Rename File")
         new_window = Canvas(self.root, width=200, height=100)
 
         self.entry = Entry(self.root)
         self.entry.insert(0, str(self.current_file.path))
         new_window.create_window(100, 35, window=self.entry)
 
-        label = Label(self.root, text="Type your new file name here:\n\n INCLUDE THE EXTENTION!")
+        label = Label(self.root, text="Type your new file name here:\n\n Include the extention in the new file name!")
         b = Button(self.root, text="rename", width=10, command=self.rename_file)
 
         label.pack()
         new_window.pack()
         b.place(x=65, y=110)
-
-        # todo: write/replace new name to never_delete_files.txt
 
     # startup
     def select_folder(self):
