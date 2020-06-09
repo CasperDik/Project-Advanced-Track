@@ -9,7 +9,7 @@ class FileDetails():
         self.folder = folder
         self.path = path  # name file without extention
 
-    def display_details(self):
+    def display_details(self):  # dispaly filename, filesize, preview text/image etc
         if self.path != "" and exists(join(self.folder.path, self.path)):
             self.gui.current_file_name.configure(text="file name: " + self.path)
             file_size = getsize(join(self.folder.path, self.path))
@@ -17,13 +17,13 @@ class FileDetails():
             self.gui.never_delete_this_file.configure(text="")
 
             filepath = join(self.folder.path, self.path)
-            # test if file is text file
+            # check if file is text file + show preview of first line file
             if filepath.endswith(".txt") == True:
                 fline = open(filepath, "r").readline()
                 self.gui.type_file_info.configure(
                     text="file type is .txt\n\n Here is a preview of content:\n" + '"' + fline + '"')
             else:
-                # test if file is an image
+                # test if file is an image + load image in new canvas
                 list = [".jpg", ".png", ".gif", ".tif"]
                 for ext in list:
                     if filepath.endswith(ext) == True:

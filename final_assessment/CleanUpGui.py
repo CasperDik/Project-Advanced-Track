@@ -37,6 +37,7 @@ class CleanUpGui(Frame):
         self.rename = Label(self)
         self.bytes_counter_label = Label(self)
 
+        # buttons
         self.delete_file_button = Button(self, text="delete", command=self.delete_current_file)
         self.skip_file_button = Button(self, text="skip", command=self.load_next_file)
         self.never_delete_button = Checkbutton(self, text="never delete this file", variable=self.checkvar1, onvalue=1,
@@ -56,18 +57,18 @@ class CleanUpGui(Frame):
         self.never_delete_button.pack()
 
     # process buttons
-    def combined_function1(self):
+    def combined_function1(self):  # to execute 2 functions with 1 button press
         self.prevent_unchecking()
         self.never_delete()
 
     def delete_current_file(self):
-        # check if a current file is available
+        #check if file is not in the "never_delete_file"
         ndfile = open("never_delete_files.txt", "r")
         ndfiles = ndfile.read().splitlines()
         path = join(self.folder_details.path, self.current_file.path)
         if path in ndfiles:
             self.never_delete_this_file.configure(text="The file" + self.current_file.path + " cannot be deleted")
-        else:
+        else:  # if not in the .txt file then deleted, load next file and count the bytes deleted
             if self.current_file:
                 file_size = getsize(join(self.folder_details.path, self.current_file.path))
                 self.bytes_counter += file_size
@@ -76,11 +77,10 @@ class CleanUpGui(Frame):
                 # load the next file
                 self.load_next_file()
 
-    def load_next_file(self):
+    def load_next_file(self):  # load next file
         if self.folder_details:
             next_file = self.folder_details.get_next_file()
-            # ^^^ is the name of the file without extention
-            if next_file:
+            if next_file:  # load next file, check if it can be deleted, disable/enable checkbox
                 self.current_file = FileDetails(self, self.folder_details, next_file)
                 self.check_not_delete_list()
                 self.prevent_unchecking()
@@ -90,12 +90,12 @@ class CleanUpGui(Frame):
                 self.prevent_unchecking()
             self.current_file.display_details()
 
-    def never_delete(self):
+    def never_delete(self):  # write absolute path to txt file, to never deleted a file with that absolute path
         path = join(self.folder_details.path, self.current_file.path)
         file = open("never_delete_files.txt", "a")
         file.write(path + "\n")
 
-    def check_not_delete_list(self):
+    def check_not_delete_list(self):  # check if file can be deleted, check the checkbox if not/uncheck if it can
         ndfile = open("never_delete_files.txt", "r")
         ndfiles = ndfile.read().splitlines()
         path = join(self.folder_details.path, self.current_file.path)
@@ -104,13 +104,14 @@ class CleanUpGui(Frame):
         else:
             self.checkvar1.set(0)
 
-    def prevent_unchecking(self):
+    def prevent_unchecking(self):  # check if file can be deleted, if not disable checkbox
         if self.checkvar1.get() == 1:
             self.never_delete_button.config(state=DISABLED)
         else:
             self.never_delete_button.config(state=NORMAL)
 
-    def rename_file(self):
+    def rename_file(
+            self):  # rename a file with userinput + if file is in never_deleted_file add new path to the text file
         path = join(self.folder_details.path, self.current_file.path)
         new_name = join(self.folder_details.path, self.entry.get())  # todo: error handling --> if no extention
         os.rename(path, new_name)
@@ -123,7 +124,8 @@ class CleanUpGui(Frame):
         self.root.destroy()
         self.load_next_file()
 
-    def rename_window(self):
+    def rename_window(
+            self):  # open new canvas, ask for user input to rename, execute function rename_file if button pressed
         self.root = Tk()
         self.root.title("Rename File")
         new_window = Canvas(self.root, width=200, height=100)
@@ -140,7 +142,7 @@ class CleanUpGui(Frame):
         b.place(x=65, y=110)
 
     # startup
-    def select_folder(self):
+    def select_folder(self):  # select folder and 'start' program, raise error if no folder selected
         try:
             folder_path = filedialog.askdirectory()
             self.folder_details = FolderDetails(folder_path)
