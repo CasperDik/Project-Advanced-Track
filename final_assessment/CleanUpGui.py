@@ -17,13 +17,12 @@ class CleanUpGui(Frame):
         Frame.__init__(self, master=master)
         self.master.title("Clean up")
         self.pack(fill=BOTH, expand=1)
-        never_delete_files = open("never_delete_files.txt", "a+")
 
         # Setup variables
         self.folder_details = None
         self.current_file = None
 
-        # checkbox
+        # dummy, =1 if in never_delete_files.txt, otherwise =0
         self.checkvar1 = IntVar()
 
         # bytes deleted counter
@@ -56,17 +55,14 @@ class CleanUpGui(Frame):
         self.rename.pack()
         self.never_delete_button.pack()
 
-    # process buttons
-    def combined_function1(self):  # to execute 2 functions with 1 button press
+    # to execute 2 functions with 1 button press
+    def combined_function1(self):
         self.prevent_unchecking()
         self.never_delete()
 
     def delete_current_file(self):
-        #check if file is not in the "never_delete_file"
-        ndfile = open("never_delete_files.txt", "r")
-        ndfiles = ndfile.read().splitlines()
-        path = join(self.folder_details.path, self.current_file.path)
-        if path in ndfiles:
+        # check if file is not in the "never_delete_file"
+        if self.checkvar1.get() == 1:
             self.never_delete_this_file.configure(text="The file" + self.current_file.path + " cannot be deleted")
         else:  # if not in the .txt file then deleted, load next file and count the bytes deleted
             if self.current_file:
@@ -90,12 +86,14 @@ class CleanUpGui(Frame):
                 self.prevent_unchecking()
             self.current_file.display_details()
 
-    def never_delete(self):  # write absolute path to txt file, to never deleted a file with that absolute path
+    # write absolute path to txt file, to never deleted a file with that absolute path
+    def never_delete(self):
         path = join(self.folder_details.path, self.current_file.path)
         file = open("never_delete_files.txt", "a")
         file.write(path + "\n")
 
-    def check_not_delete_list(self):  # check if file can be deleted, check the checkbox if not/uncheck if it can
+    # check if file can be deleted, check the checkbox if not/uncheck if it can
+    def check_not_delete_list(self):
         ndfile = open("never_delete_files.txt", "r")
         ndfiles = ndfile.read().splitlines()
         path = join(self.folder_details.path, self.current_file.path)
@@ -104,14 +102,15 @@ class CleanUpGui(Frame):
         else:
             self.checkvar1.set(0)
 
-    def prevent_unchecking(self):  # check if file can be deleted, if not disable checkbox
+    # check if file can be deleted, if not disable checkbox
+    def prevent_unchecking(self):
         if self.checkvar1.get() == 1:
             self.never_delete_button.config(state=DISABLED)
         else:
             self.never_delete_button.config(state=NORMAL)
 
-    def rename_file(
-            self):  # rename a file with userinput + if file is in never_deleted_file add new path to the text file
+    # rename a file with userinput + if file is in never_deleted_file add new path to the text file
+    def rename_file(self):
         path = join(self.folder_details.path, self.current_file.path)
         new_name = join(self.folder_details.path, self.entry.get())  # todo: error handling --> if no extention
         os.rename(path, new_name)
@@ -124,8 +123,8 @@ class CleanUpGui(Frame):
         self.root.destroy()
         self.load_next_file()
 
-    def rename_window(
-            self):  # open new canvas, ask for user input to rename, execute function rename_file if button pressed
+    # open new canvas, ask for user input to rename, execute function rename_file if button pressed
+    def rename_window(self):
         self.root = Tk()
         self.root.title("Rename File")
         new_window = Canvas(self.root, width=200, height=100)
@@ -142,7 +141,8 @@ class CleanUpGui(Frame):
         b.place(x=65, y=110)
 
     # startup
-    def select_folder(self):  # select folder and 'start' program, raise error if no folder selected
+    # select folder and 'start' program, raise error if no folder selected
+    def select_folder(self):
         try:
             folder_path = filedialog.askdirectory()
             self.folder_details = FolderDetails(folder_path)
