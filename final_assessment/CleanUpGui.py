@@ -34,14 +34,15 @@ class CleanUpGui(Frame):
         self.current_file_size = Label(self)
         self.type_file_info = Label(self)
         self.never_delete_this_file = Label(self)
-
+        self.rename = Label(self)
         self.bytes_counter_label = Label(self)
 
         self.delete_file_button = Button(self, text="delete", command=self.delete_current_file)
-        self.skip_file_button = Button(self, text="skip", command=self.combined_function2)
+        self.skip_file_button = Button(self, text="skip", command=self.load_next_file)
         self.never_delete_button = Checkbutton(self, text="never delete this file", variable=self.checkvar1, onvalue=1,
                                                offvalue=0, command=self.combined_function1)
         self.bytes_counter_label.configure(text="current bytes deleted: " + str(self.bytes_counter))
+        self.rename = Button(text="rename file", command=self.rename_window)
 
         # Place GUI elements on Canvas
         self.current_file_name.pack()  # todo: greate nice layout, improvement 1?
@@ -51,16 +52,13 @@ class CleanUpGui(Frame):
         self.bytes_counter_label.pack()
         self.delete_file_button.pack()
         self.skip_file_button.pack()
+        self.rename.pack()
         self.never_delete_button.pack()
 
     # process buttons
     def combined_function1(self):
         self.prevent_unchecking()
         self.never_delete()
-
-    def combined_function2(self):
-        self.load_next_file()
-        self.rename_file()
 
     def delete_current_file(self):
         # check if a current file is available
@@ -112,8 +110,29 @@ class CleanUpGui(Frame):
         else:
             self.never_delete_button.config(state=NORMAL)
 
-    def rename_file(self):  # todo: Allow the user to rename the file that should be kept.
-        pass  # write/replace new name to never_delete_files.txt
+    def rename_file(self):
+        path = join(self.folder_details.path, self.current_file.path)
+        new_name = join(self.folder_details.path, self.entry.get())  # todo: error handling --> if not extention
+        os.rename(path, new_name)
+        self.root.destroy()
+        self.load_next_file()
+
+    def rename_window(self):  # todo: Allow the user to rename the file that should be kept.
+        self.root = Tk()
+        new_window = Canvas(self.root, width=200, height=100)
+
+        self.entry = Entry(self.root)
+        self.entry.insert(0, str(self.current_file.path))
+        new_window.create_window(100, 35, window=self.entry)
+
+        label = Label(self.root, text="Type your new file name here:\n\n INCLUDE THE EXTENTION!")
+        b = Button(self.root, text="rename", width=10, command=self.rename_file)
+
+        label.pack()
+        new_window.pack()
+        b.place(x=65, y=110)
+
+        # todo: write/replace new name to never_delete_files.txt
 
     # startup
     def select_folder(self):
