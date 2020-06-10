@@ -26,7 +26,7 @@ x_range = list(range(len(nested_list[0])))
 for i in range(n_lines):
     plt.plot(x_range, nested_list[i])
 
-plt.xlim(5, n)
+plt.xlim(0, n)
 plt.ylim(-1, 1)
 plt.axhline(0, color="black", ls="--")
 plt.show()
