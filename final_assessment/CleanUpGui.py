@@ -17,6 +17,7 @@ class CleanUpGui(Frame):
     def __init__(self, master=None):
         Frame.__init__(self, master=master)
         self.master.title("Clean up")
+
         self.grid(row=11, column=3, sticky=NSEW)
         self.progress = Progressbar(self, orient=HORIZONTAL, length=200, maximum=100, mode='determinate')
 
@@ -47,6 +48,7 @@ class CleanUpGui(Frame):
         self.rename_button = Button(self, text="rename file", command=self.rename_window)
 
         # Place GUI elements on Canvas
+        self.progress.grid(row=0, column=0, columnspan=3)
         self.current_file_name.grid(row=1, column=0, columnspan=3, rowspan=1, sticky="W")
         self.current_file_size.grid(row=2, column=0, columnspan=3, rowspan=1, sticky="W")
         self.bytes_counter_label.grid(row=3, column=0, columnspan=3, rowspan=1, sticky="W")
@@ -59,8 +61,6 @@ class CleanUpGui(Frame):
         self.rename_button.grid(row=10, column=2, columnspan=1, rowspan=1, sticky="ESW")
 
         self.never_delete_button.grid(row=11, column=0, columnspan=3, rowspan=1, sticky="W")
-
-        self.progress.grid(row=0, column=0, columnspan=3)
 
     # steps of the progress bar for each file
     def progress_bar(self):
