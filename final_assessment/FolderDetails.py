@@ -10,7 +10,7 @@ class FolderDetails():
         if isdir(path):
             # only add files not sub folders
             self.files_to_check = [f for f in listdir(path) if isfile(join(path, f))]
-            #^^^list with the file names without extention
+            self.n_files = len(self.files_to_check)
 
     def get_next_file(self):
         if self.files_to_check:
