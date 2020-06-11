@@ -21,13 +21,13 @@ class FileDetails():
             if filepath.endswith(".txt") == True:
                 fline = open(filepath, "r").readline()
                 self.gui.type_file_info.configure(
-                    text="file type is .txt\n\n Here is a preview of content:\n" + '"' + fline + '"')
+                    text="file type is: .txt\n\n Here is a preview of content:\n\n" + '"' + fline + '"'"\n")
             else:
                 # test if file is an image + load image in new canvas
                 list = [".jpg", ".png", ".gif", ".tif"]
                 for ext in list:
                     if filepath.endswith(ext) == True:
-                        self.gui.type_file_info.configure(text="file is an image")
+                        self.gui.type_file_info.configure(text="file is an image\n")
 
                         root = Toplevel()
                         canvas = Canvas(root, width=300, height=300)
@@ -42,3 +42,4 @@ class FileDetails():
             self.gui.current_file_name.configure(text="file name: <no file selected>")
             self.gui.current_file_size.configure(text="file size: <no file selected>")
             self.gui.type_file_info.configure(text="")
+            self.gui.disable_buttons()

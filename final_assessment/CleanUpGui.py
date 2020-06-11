@@ -16,7 +16,7 @@ class CleanUpGui(Frame):
     def __init__(self, master=None):
         Frame.__init__(self, master=master)
         self.master.title("Clean up")
-        self.pack(fill=BOTH, expand=1)
+        self.grid(row=10, column=3, sticky=NSEW)
 
         # Setup variables
         self.folder_details = None
@@ -33,8 +33,8 @@ class CleanUpGui(Frame):
         self.current_file_size = Label(self)
         self.type_file_info = Label(self)
         self.never_delete_this_file = Label(self)
-        self.rename = Label(self)
         self.bytes_counter_label = Label(self)
+        self.rename_button = Label(self)
 
         # buttons
         self.delete_file_button = Button(self, text="delete", command=self.delete_current_file)
@@ -42,18 +42,21 @@ class CleanUpGui(Frame):
         self.never_delete_button = Checkbutton(self, text="never delete this file", variable=self.checkvar1, onvalue=1,
                                                offvalue=0, command=self.combined_function1)
         self.bytes_counter_label.configure(text="current bytes deleted: " + str(self.bytes_counter))
-        self.rename = Button(text="rename file", command=self.rename_window)
+        self.rename_button = Button(self, text="rename file", command=self.rename_window)
 
         # Place GUI elements on Canvas
-        self.current_file_name.pack()  # todo: create nice layout, improvement 1?
-        self.current_file_size.pack()
-        self.never_delete_this_file.pack()
-        self.type_file_info.pack()
-        self.bytes_counter_label.pack()
-        self.delete_file_button.pack()
-        self.skip_file_button.pack()
-        self.rename.pack()
-        self.never_delete_button.pack()
+        self.current_file_name.grid(row=0, column=0, columnspan=3, rowspan=1, sticky="W")
+        self.current_file_size.grid(row=1, column=0, columnspan=3, rowspan=1, sticky="W")
+        self.bytes_counter_label.grid(row=2, column=0, columnspan=3, rowspan=1, sticky="W")
+
+        self.never_delete_this_file.grid(row=3, column=0, columnspan=3, rowspan=1, sticky="NESW")
+        self.type_file_info.grid(row=4, column=0, columnspan=3, rowspan=4, sticky="NESW")
+
+        self.delete_file_button.grid(row=9, column=0, columnspan=1, rowspan=1, sticky="ESW")
+        self.skip_file_button.grid(row=9, column=1, columnspan=1, rowspan=1, sticky="ESW")
+        self.rename_button.grid(row=9, column=2, columnspan=1, rowspan=1, sticky="ESW")
+
+        self.never_delete_button.grid(row=10, column=0, columnspan=3, rowspan=1, sticky="W")
 
     # to execute 2 functions with 1 button press
     def combined_function1(self):
@@ -139,6 +142,12 @@ class CleanUpGui(Frame):
         label.pack()
         new_window.pack()
         b.place(x=65, y=110)
+
+    def disable_buttons(self):
+        self.delete_file_button["state"] = DISABLED
+        self.rename_button["state"] = DISABLED
+        self.never_delete_button["state"] = DISABLED
+        self.skip_file_button["state"] = DISABLED
 
     # startup
     # select folder and 'start' program, raise error if no folder selected

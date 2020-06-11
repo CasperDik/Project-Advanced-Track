@@ -22,7 +22,7 @@ class Example(Frame):
         lbl.grid(sticky=W, pady=4, padx=5)
 
         area = Text(self)
-        area.grid(row=1, column=0, columnspan=2, rowspan=4,
+        area.grid(row=0, column=0, columnspan=2, rowspan=4,
                   padx=5, sticky=E + W + S + N)
 
         abtn = Button(self, text="Activate")
