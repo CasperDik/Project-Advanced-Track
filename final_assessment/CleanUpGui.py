@@ -2,6 +2,7 @@ from tkinter import *
 from os import remove, listdir
 from os.path import exists, getsize, isdir, isfile, join
 import os
+import shutil
 
 from tkinter import filedialog
 from tkinter.ttk import Progressbar
@@ -11,19 +12,19 @@ from FolderDetails import FolderDetails
 
 
 # todo: error handling
-# todo: Allow the user to create ”quick move” folders where they can move the current file to that folder. (These should also be saved in a/the configuration file).
 
 class CleanUpGui(Frame):
     def __init__(self, master=None):
         Frame.__init__(self, master=master)
         self.master.title("Clean up")
 
-        self.grid(row=11, column=3, sticky=NSEW)
+        self.grid(row=12, column=3, sticky=NSEW)
         self.progress = Progressbar(self, orient=HORIZONTAL, length=200, maximum=100, mode='determinate')
 
         # Setup variables
         self.folder_details = None
         self.current_file = None
+        self.new_path = ""
 
         # dummy, =1 if in never_delete_files.txt, otherwise =0
         self.checkvar1 = IntVar()
@@ -46,6 +47,7 @@ class CleanUpGui(Frame):
                                                offvalue=0, command=self.combined_function1)
         self.bytes_counter_label.configure(text="current bytes deleted: " + str(self.bytes_counter))
         self.rename_button = Button(self, text="rename file", command=self.rename_window)
+        self.quick_move_button = Button(self, text="Quick Move", command=self.quick_move)
 
         # Place GUI elements on Canvas
         self.progress.grid(row=0, column=0, columnspan=3)
@@ -56,11 +58,13 @@ class CleanUpGui(Frame):
         self.never_delete_this_file.grid(row=4, column=0, columnspan=3, rowspan=1, sticky="NESW")
         self.type_file_info.grid(row=5, column=0, columnspan=3, rowspan=4, sticky="NESW")
 
-        self.delete_file_button.grid(row=10, column=0, columnspan=1, rowspan=1, sticky="ESW")
-        self.skip_file_button.grid(row=10, column=1, columnspan=1, rowspan=1, sticky="ESW")
-        self.rename_button.grid(row=10, column=2, columnspan=1, rowspan=1, sticky="ESW")
+        self.quick_move_button.grid(row=10, column=0, columnspan=3, rowspan=1, sticky="ESW")
 
-        self.never_delete_button.grid(row=11, column=0, columnspan=3, rowspan=1, sticky="W")
+        self.delete_file_button.grid(row=11, column=0, columnspan=1, rowspan=1, sticky="ESW")
+        self.skip_file_button.grid(row=11, column=1, columnspan=1, rowspan=1, sticky="ESW")
+        self.rename_button.grid(row=11, column=2, columnspan=1, rowspan=1, sticky="ESW")
+
+        self.never_delete_button.grid(row=12, column=0, columnspan=3, rowspan=1, sticky="W")
 
     # steps of the progress bar for each file
     def progress_bar(self):
@@ -159,6 +163,15 @@ class CleanUpGui(Frame):
         self.rename_button["state"] = DISABLED
         self.never_delete_button["state"] = DISABLED
         self.skip_file_button["state"] = DISABLED
+        self.quick_move_button["state"] = DISABLED
+
+    # Move file to selected directory
+    def quick_move(self):
+        if self.new_path == "":
+            self.new_path = filedialog.askdirectory()
+        shutil.move(join(self.folder_details.path, self.current_file.path), self.new_path)
+        self.load_next_file()
+        # todo: safe file in configuration file?
 
     # startup
     # select folder and 'start' program, raise error if no folder selected
