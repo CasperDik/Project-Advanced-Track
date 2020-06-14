@@ -68,20 +68,21 @@ class CleanUpGui(Frame):
 
     # steps of the progress bar for each file
     def progress_bar(self):
-        x = self.folder_details.n_files
-        y = (100 - 0.001) / x
-        self.progress.step(y)
+        n = self.folder_details.n_files
+        steps = (100 - 0.001) / n
+        self.progress.step(steps)
 
     # to execute 2 functions with 1 button press
     def combined_function1(self):
         self.prevent_unchecking()
         self.never_delete()
 
+    # delete files with button press
     def delete_current_file(self):
-        # check if file is not in the "never_delete_file"
+        # check if file is not in the "never_delete_file" i.e. box is unchecked/dummy equal to 0
         if self.checkvar1.get() == 1:
             self.never_delete_this_file.configure(text="The file" + self.current_file.path + " cannot be deleted")
-        else:  # if not in the .txt file then deleted, load next file and count the bytes deleted
+        else:  # if not in the .txt file then delete, load next file and count the bytes deleted
             if self.current_file:
                 file_size = getsize(join(self.folder_details.path, self.current_file.path))
                 self.bytes_counter += file_size
@@ -90,10 +91,11 @@ class CleanUpGui(Frame):
                 # load the next file
                 self.load_next_file()
 
-    def load_next_file(self):  # load next file
+    # load next file
+    def load_next_file(self):
         if self.folder_details:
             next_file = self.folder_details.get_next_file()
-            if next_file:  # load next file, check if it can be deleted, disable/enable checkbox
+            if next_file:  # load next file, check if it can be deleted, disable/enable checkbox, move progress bar
                 self.current_file = FileDetails(self, self.folder_details, next_file)
                 self.check_not_delete_list()
                 self.prevent_unchecking()
@@ -104,7 +106,7 @@ class CleanUpGui(Frame):
                 self.prevent_unchecking()
             self.current_file.display_details()
 
-    # write absolute path to txt file, to never deleted a file with that absolute path
+    # write absolute path to txt file, to never deleted a file with that exact absolute path
     def never_delete(self):
         path = join(self.folder_details.path, self.current_file.path)
         file = open("never_delete_files.txt", "a")
@@ -127,7 +129,7 @@ class CleanUpGui(Frame):
         else:
             self.never_delete_button.config(state=NORMAL)
 
-    # rename a file with user input + if file is in never_deleted_file add new path to the text file
+    # rename a file with user input + if file is in never_deleted_file add the new path to the text file
     def rename_file(self):
         path = join(self.folder_details.path, self.current_file.path)
         new_name = join(self.folder_details.path, self.entry.get())
@@ -158,6 +160,7 @@ class CleanUpGui(Frame):
         new_window.pack()
         b.place(x=65, y=110)
 
+    # disable buttons when went through all files, to prevent any errors from occurring
     def disable_buttons(self):
         self.delete_file_button["state"] = DISABLED
         self.rename_button["state"] = DISABLED
