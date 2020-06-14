@@ -127,7 +127,7 @@ class CleanUpGui(Frame):
         else:
             self.never_delete_button.config(state=NORMAL)
 
-    # rename a file with userinput + if file is in never_deleted_file add new path to the text file
+    # rename a file with user input + if file is in never_deleted_file add new path to the text file
     def rename_file(self):
         path = join(self.folder_details.path, self.current_file.path)
         new_name = join(self.folder_details.path, self.entry.get())
@@ -151,7 +151,7 @@ class CleanUpGui(Frame):
         self.entry.insert(0, str(self.current_file.path))
         new_window.create_window(100, 35, window=self.entry)
 
-        label = Label(self.root, text="Type your new file name here:\n\n Include the extention in the new file name!")
+        label = Label(self.root, text="Type your new file name here:\n\n Include the extension in the new file name!")
         b = Button(self.root, text="rename", width=10, command=self.rename_file)
 
         label.pack()
@@ -165,16 +165,19 @@ class CleanUpGui(Frame):
         self.skip_file_button["state"] = DISABLED
         self.quick_move_button["state"] = DISABLED
 
-    # Move file to selected directory
+    # Move file to selected directory, raise error if no directory selected to move the file to
     def quick_move(self):
-        if self.new_path == "":
-            self.new_path = filedialog.askdirectory()
-        shutil.move(join(self.folder_details.path, self.current_file.path), self.new_path)
-        self.load_next_file()
+        try:
+            if self.new_path == "":
+                self.new_path = filedialog.askdirectory()
+            shutil.move(join(self.folder_details.path, self.current_file.path), self.new_path)
+            self.load_next_file()
+        except FileNotFoundError:
+            print("no directory selected to move the file to")
         # todo: safe file in configuration file?
 
     # startup
-    # select folder and 'start' program, raise error if no folder selected
+    # select directory and 'start' the program, raise error if no directory selected
     def select_folder(self):
         try:
             folder_path = filedialog.askdirectory()
