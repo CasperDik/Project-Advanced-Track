@@ -11,7 +11,8 @@ from FileDetails import FileDetails
 from FolderDetails import FolderDetails
 
 
-# todo: error handling --> rename: weird filenames/not allowed symbols, delete: already deleted manuallt after start running program,
+# todo: error handling
+# todo: put the print commands on canvas(some of them)
 
 class CleanUpGui(Frame):
     def __init__(self, master=None):
@@ -43,12 +44,12 @@ class CleanUpGui(Frame):
         self.rename_button = Label(self)
 
         # buttons
-        self.delete_file_button = Button(self, text="delete", command=self.delete_current_file)
-        self.skip_file_button = Button(self, text="skip", command=self.load_next_file)
-        self.never_delete_button = Checkbutton(self, text="never delete this file", variable=self.checkvar1, onvalue=1,
+        self.delete_file_button = Button(self, text="Delete", command=self.delete_current_file)
+        self.skip_file_button = Button(self, text="Skip", command=self.load_next_file)
+        self.never_delete_button = Checkbutton(self, text="Never delete this file", variable=self.checkvar1, onvalue=1,
                                                offvalue=0, command=self.combined_function1)
-        self.bytes_counter_label.configure(text="current bytes deleted: " + str(self.bytes_counter))
-        self.rename_button = Button(self, text="rename file", command=self.rename_window)
+        self.bytes_counter_label.configure(text="Current bytes deleted: " + str(self.bytes_counter))
+        self.rename_button = Button(self, text="Rename file", command=self.rename_window)
         self.quick_move_button = Button(self, text="Quick Move", command=self.quick_move)
 
         # Place GUI elements on Canvas
@@ -81,17 +82,21 @@ class CleanUpGui(Frame):
 
     # delete files with button press
     def delete_current_file(self):
-        # check if file is not in the "never_delete_file" i.e. box is unchecked/dummy equal to 0
-        if self.checkvar1.get() == 1:
-            self.never_delete_this_file.configure(text="The file" + self.current_file.path + " cannot be deleted")
-        else:  # if not in the .txt file then delete, load next file and count the bytes deleted
-            if self.current_file:
-                file_size = getsize(join(self.folder_details.path, self.current_file.path))
-                self.bytes_counter += file_size
-                self.bytes_counter_label.configure(text="current bytes deleted: " + str(self.bytes_counter))
-                remove(join(self.folder_details.path, self.current_file.path))
-                # load the next file
-                self.load_next_file()
+        try:
+            # check if file is not in the "never_delete_file" i.e. box is unchecked/dummy equal to 0
+            if self.checkvar1.get() == 1:
+                self.never_delete_this_file.configure(text="The file" + self.current_file.path + " cannot be deleted")
+            else:  # if not in the .txt file then delete, load next file and count the bytes deleted
+                if self.current_file:
+                    file_size = getsize(join(self.folder_details.path, self.current_file.path))
+                    self.bytes_counter += file_size
+                    self.bytes_counter_label.configure(text="current bytes deleted: " + str(self.bytes_counter))
+                    remove(join(self.folder_details.path, self.current_file.path))
+                    # load the next file
+                    self.load_next_file()
+        except FileNotFoundError:  # if file not found e.g. because deleted manually after program started
+            print("no file to delete")
+            self.load_next_file()
 
     # load next file
     def load_next_file(self):
@@ -133,17 +138,20 @@ class CleanUpGui(Frame):
 
     # rename a file with user input + if file is in never_deleted_file add the new path to the text file
     def rename_file(self):
-        path = join(self.folder_details.path, self.current_file.path)
-        new_name = join(self.folder_details.path, self.entry.get())
-        os.rename(path, new_name)
+        try:
+            path = join(self.folder_details.path, self.current_file.path)
+            new_name = join(self.folder_details.path, self.entry.get())
+            os.rename(path, new_name)
 
-        if self.checkvar1.get() == 1:
-            path = join(self.folder_details.path, self.entry.get())
-            file = open("never_delete_files.txt", "a")
-            file.write(path + "\n")
+            if self.checkvar1.get() == 1:
+                path = join(self.folder_details.path, self.entry.get())
+                file = open("never_delete_files.txt", "a")
+                file.write(path + "\n")
 
-        self.root.destroy()
-        self.load_next_file()
+            self.root.destroy()
+            self.load_next_file()
+        except OSError:  # if file name not allowed raise error
+            print("file name not allowed")
 
     # open new canvas, ask for user input to rename, execute function rename_file if button pressed
     def rename_window(self):
@@ -170,7 +178,7 @@ class CleanUpGui(Frame):
         self.skip_file_button["state"] = DISABLED
         self.quick_move_button["state"] = DISABLED
 
-    # Move file to selected directory, raise error if no directory selected to move the file to
+    # Move file to selected directory, raise error if no directory selected to or file doesnt exist anymore
     def quick_move(self):
         try:
             if self.new_path == "":
