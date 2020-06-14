@@ -1,7 +1,7 @@
 from tkinter import *
 from os import remove, listdir
 from os.path import exists, getsize, isdir, isfile, join
-import os
+import os, stat
 import shutil
 
 from tkinter import filedialog
@@ -11,7 +11,7 @@ from FileDetails import FileDetails
 from FolderDetails import FolderDetails
 
 
-# todo: error handling
+# todo: error handling --> if never_delete_files is rename, deleted, moved
 # todo: put the print commands on canvas(some of them)
 
 class CleanUpGui(Frame):
