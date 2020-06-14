@@ -11,7 +11,7 @@ from FileDetails import FileDetails
 from FolderDetails import FolderDetails
 
 
-# todo: error handling
+# todo: error handling --> rename: weird filenames/not allowed symbols, delete: already deleted manuallt after start running program,
 
 class CleanUpGui(Frame):
     def __init__(self, master=None):
@@ -20,6 +20,8 @@ class CleanUpGui(Frame):
 
         self.grid(row=12, column=3, sticky=NSEW)
         self.progress = Progressbar(self, orient=HORIZONTAL, length=200, maximum=100, mode='determinate')
+
+        file = open("never_delete_files.txt", "w+")
 
         # Setup variables
         self.folder_details = None
