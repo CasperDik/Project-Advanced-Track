@@ -30,11 +30,12 @@ class FileDetails():
                         self.gui.type_file_info.configure(text="file is an image\n")
 
                         root = Toplevel()
-                        canvas = Canvas(root, width=300, height=300)
-                        root.title("Preview")
-                        canvas.pack()
                         self.img = ImageTk.PhotoImage(Image.open(filepath))
+                        canvas = Canvas(root, width=self.img.width() * 1.2, height=self.img.height() * 1.2)
+                        root.title("Preview")
+                        canvas.pack(fill=BOTH, expand=1)
                         canvas.create_image(20, 20, anchor=NW, image=self.img)
+
                         break
                 else:
                     self.gui.type_file_info.configure(text="")

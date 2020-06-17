@@ -1,7 +1,7 @@
 from tkinter import *
-from os import remove, listdir
-from os.path import exists, getsize, isdir, isfile, join
-import os, stat
+from os import remove
+from os.path import getsize, join
+import os
 import shutil
 
 from tkinter import filedialog
@@ -11,9 +11,6 @@ from FileDetails import FileDetails
 from FolderDetails import FolderDetails
 
 
-# todo: error handling --> if never_delete_files is rename, deleted, moved
-# todo: put the print commands on canvas(some of them)
-
 class CleanUpGui(Frame):
     def __init__(self, master=None):
         Frame.__init__(self, master=master)
@@ -22,7 +19,7 @@ class CleanUpGui(Frame):
         self.grid(row=12, column=3, sticky=NSEW)
         self.progress = Progressbar(self, orient=HORIZONTAL, length=200, maximum=100, mode='determinate')
 
-        file = open("never_delete_files.txt", "w+")
+        file = open("never_delete_files.txt", "a")
 
         # Setup variables
         self.folder_details = None
@@ -80,6 +77,7 @@ class CleanUpGui(Frame):
         self.prevent_unchecking()
         self.never_delete()
 
+
     # delete files with button press
     def delete_current_file(self):
         try:
@@ -111,6 +109,7 @@ class CleanUpGui(Frame):
                 self.current_file = FileDetails(self, self.folder_details, "")
                 self.check_not_delete_list()
                 self.prevent_unchecking()
+                self.progress.grid_forget()
             self.current_file.display_details()
 
     # write absolute path to txt file, to never deleted a file with that exact absolute path
@@ -187,7 +186,9 @@ class CleanUpGui(Frame):
             self.load_next_file()
         except FileNotFoundError:
             print("no directory selected to move the file to")
-        # todo: safe file in configuration file?
+
+    def delete_path(self):
+        pass
 
     # startup
     # select directory and 'start' the program, raise error if no directory selected
